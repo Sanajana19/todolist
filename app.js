@@ -10,35 +10,42 @@ const selectAllBtn = document.querySelector("#select-all-btn");
 const deselectAllBtn = document.querySelector("#deselect-all-btn");
 const deleteSelectedBtn = document.querySelector("#delete-selected-btn");
 
+const tabButtons = document.querySelectorAll(".tab-button");
+
+tabButtons.forEach(button => {
+  button.addEventListener("click", function () {
+    
+    tabButtons.forEach(btn => btn.classList.remove("active"));
+
+    this.classList.add("active");
+  });
+});
+
 let todos = [];
 
-function addTodoItem(event) 
-{
+function addTodoItem(event) {
   event.preventDefault();
 
-  const todoText = todoInput.value.trim(); 
+  const todoText = todoInput.value.trim();
 
-  if (todoText !== "") 
-  {
-    const todo = 
-    {
-      id: Date.now(), 
+  if (todoText !== "") {
+    const todo = {
+      id: Date.now(),
       text: todoText,
-      completed: false
+      completed: false,
     };
 
-    todos.push(todo); 
-    todoInput.value = ""; 
+    todos.push(todo);
+    todoInput.value = "";
 
     renderTodoList();
   }
 }
 
-function renderTodoList(filteredTodos) 
-{
-  todoList.innerHTML = ""; 
+function renderTodoList(filteredTodos) {
+  todoList.innerHTML = "";
 
-  const todosToRender = filteredTodos || todos;  
+  const todosToRender = filteredTodos || todos;
 
   todosToRender.forEach(todo => {
     const listItem = document.createElement("li");
@@ -48,7 +55,9 @@ function renderTodoList(filteredTodos)
     }
 
     listItem.innerHTML = `
-      <input type="checkbox" class="todo-checkbox" data-id="${todo.id}" ${todo.completed ? "checked" : ""}>
+      <input type="checkbox" class="todo-checkbox" data-id="${todo.id}" ${
+      todo.completed ? "checked" : ""
+    }>
       <span>${todo.text}</span>
       <button class="edit-btn" data-id="${todo.id}">Edit</button>
       <button class="delete-btn" data-id="${todo.id}">Delete</button>
@@ -58,39 +67,33 @@ function renderTodoList(filteredTodos)
   });
 }
 
-function toggleCompletionStatus(event) 
-{
-  if (event.target.matches(".todo-checkbox")) 
-  {
+function toggleCompletionStatus(event) {
+  if (event.target.matches(".todo-checkbox")) {
     const todoId = parseInt(event.target.dataset.id);
-    todos = todos.map(todo => 
-      {
-        if (todo.id === todoId) 
-        {
-          todo.completed = !todo.completed;
-        }
-       return todo;
+    todos = todos.map(todo => {
+      if (todo.id === todoId) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
     });
 
     renderTodoList();
   }
 }
 
-function editTodoItem(event) 
-{
-  if (event.target.matches(".edit-btn")) 
-  {
+function editTodoItem(event) {
+  if (event.target.matches(".edit-btn")) {
     const todoId = parseInt(event.target.dataset.id);
-    const todoText = prompt("Edit the to-do item:", todos.find(todo => todo.id === todoId).text);
+    const todoText = prompt(
+      "Edit the to-do item:",
+      todos.find(todo => todo.id === todoId).text
+    );
 
-    if (todoText !== null)
-    {
-      todos = todos.map(todo => 
-        {
-          if (todo.id === todoId) 
-          {
-            todo.text = todoText.trim();
-          }
+    if (todoText !== null) {
+      todos = todos.map(todo => {
+        if (todo.id === todoId) {
+          todo.text = todoText.trim();
+        }
         return todo;
       });
 
@@ -99,8 +102,7 @@ function editTodoItem(event)
   }
 }
 
-function deleteTodoItem(event) 
-{
+function deleteTodoItem(event) {
   if (event.target.matches(".delete-btn")) {
     const todoId = parseInt(event.target.dataset.id);
     todos = todos.filter(todo => todo.id !== todoId);
@@ -109,10 +111,11 @@ function deleteTodoItem(event)
   }
 }
 
-function filterTodoList() 
-{
+function filterTodoList() {
   const searchTerm = searchInput.value.trim().toLowerCase();
-  const filteredTodos = todos.filter(todo => todo.text.toLowerCase().includes(searchTerm));
+  const filteredTodos = todos.filter(todo =>
+    todo.text.toLowerCase().includes(searchTerm)
+  );
 
   renderTodoList(filteredTodos);
 }
@@ -136,44 +139,51 @@ function filterByTab(event) {
 
 function sortTodoList() {
   const sortOption = sortDropdown.value;
+  const selectedTab = document.querySelector(".tab-button.active");
+  const tabId = selectedTab.id;
 
   let sortedTodos = [];
 
-  if (sortOption === "A-Z") {
-    sortedTodos = todos.sort((a, b) => a.text.localeCompare(b.text));
-  } else if (sortOption === "Z-A") {
-    sortedTodos = todos.sort((a, b) => b.text.localeCompare(a.text));
-  } else if (sortOption === "oldest") {
-    sortedTodos = todos.sort((a, b) => a.id - b.id);
-  } else if (sortOption === "newest") {
-    sortedTodos = todos.sort((a, b) => b.id - a.id);
+  if (tabId === "active-tab") {
+    const activeTodos = todos.filter(todo => !todo.completed);
+
+    if (sortOption === "A-Z") {
+      sortedTodos = activeTodos.sort((a, b) => a.text.localeCompare(b.text));
+    } else if (sortOption === "Z-A") {
+      sortedTodos = activeTodos.sort((a, b) => b.text.localeCompare(a.text));
+    } else if (sortOption === "oldest") {
+      sortedTodos = activeTodos.sort((a, b) => a.id - b.id);
+    } else if (sortOption === "newest") {
+      sortedTodos = activeTodos.sort((a, b) => b.id - a.id);
+    }
+  } else if (tabId === "completed-tab") {
+    const completedTodos = todos.filter(todo => todo.completed);
+    if (sortOption === "A-Z") {
+      sortedTodos = completedTodos.sort((a, b) => a.text.localeCompare(b.text));
+    } else if (sortOption === "Z-A") {
+      sortedTodos = completedTodos.sort((a, b) => b.text.localeCompare(a.text));
+    } else if (sortOption === "oldest") {
+      sortedTodos = completedTodos.sort((a, b) => a.id - b.id);
+    } else if (sortOption === "newest") {
+      sortedTodos = completedTodos.sort((a, b) => b.id - a.id);
+    }
+  } else {
+    if (sortOption === "A-Z") {
+      sortedTodos = todos.sort((a, b) => a.text.localeCompare(b.text));
+    } else if (sortOption === "Z-A") {
+      sortedTodos = todos.sort((a, b) => b.text.localeCompare(a.text));
+    } else if (sortOption === "oldest") {
+      sortedTodos = todos.sort((a, b) => a.id - b.id);
+    } else if (sortOption === "newest") {
+      sortedTodos = todos.sort((a, b) => b.id - a.id);
+    }
   }
 
-  renderTodoList(sortedTodos);
-}
-
-function selectAll() {
-  todos = todos.map(todo => ({
-    ...todo,
-    completed: true
-  }));
-
-  renderTodoList();
-}
-
-function deselectAll() {
-  todos = todos.map(todo => ({
-    ...todo,
-    completed: false
-  }));
-
-  renderTodoList();
-}
-
-function deleteSelected() {
-  todos = todos.filter(todo => !todo.completed);
-
-  renderTodoList();
+  if (tabId !== "all-tab") {
+    renderTodoList(sortedTodos);
+  } else {
+    renderTodoList(todos);
+  }
 }
 
 todoForm.addEventListener("submit", addTodoItem);
@@ -185,6 +195,3 @@ allTab.addEventListener("click", filterByTab);
 activeTab.addEventListener("click", filterByTab);
 completedTab.addEventListener("click", filterByTab);
 sortDropdown.addEventListener("change", sortTodoList);
-selectAllBtn.addEventListener("click", selectAll);
-deselectAllBtn.addEventListener("click", deselectAll);
-deleteSelectedBtn.addEventListener("click", deleteSelected);

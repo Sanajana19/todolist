@@ -1,41 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>To-Do List App</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <h1>To-Do List</h1>
-    <form id="todo-form">
-      <input type="text" id="todo-input" placeholder="Enter a to-do item">
-      <button type="submit">Add</button>
-    </form>
-   
-    <input type="text" id="search-input" placeholder="Search">
-    <ul id="todo-list"></ul>
-    <div class="tabs">
-      <button id="all-tab" class="tab-button">All</button>
-      <button id="active-tab" class="tab-button">Active</button>
-      <button id="completed-tab" class="tab-button">Completed</button>
-    </div>
-    <br>
-    <div class="todo-actions">
-      <button id="select-all-btn">Select All</button>
-      <button id="deselect-all-btn">Deselect All</button>
-      <button id="delete-selected-btn">Delete Selected</button>
-    </div><br>
-    <div class="sort">
-      <label for="sort-dropdown">Sort By:</label>
-      <select id="sort-dropdown">
-        <option value="A-Z">A-Z</option>
-        <option value="Z-A">Z-A</option>
-        <option value="oldest">Oldest</option>
-        <option value="newest">Newest</option>
-      </select>
-    </div>
-  </div>
+  <head>
+    <title>To-Do List App</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>To-Do List</h1>
+      <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Enter a to-do item" />
+        <button type="submit">Add</button>
+      </form>
 
-  <script src="app.js"></script>
-</body>
+      <input type="text" id="search-input" placeholder="Search" />
+      <ul id="todo-list"></ul>
+      <div class="tabs">
+        <button id="all-tab" class="tab-button active">All</button>
+        <button id="active-tab" class="tab-button">Active</button>
+        <button id="completed-tab" class="tab-button">Completed</button>
+      </div>
+      <br />
+      <div class="todo-actions">
+        <button id="select-all-btn">Select All</button>
+        <button id="deselect-all-btn">Deselect All</button>
+        <button id="delete-selected-btn">Delete Selected</button>
+      </div>
+      <br />
+      <div class="sort">
+        <label for="sort-dropdown">Sort By:</label>
+        <select id="sort-dropdown">
+          <option value="A-Z">A-Z</option>
+          <option value="Z-A">Z-A</option>
+          <option value="oldest">Oldest</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
 </html>
